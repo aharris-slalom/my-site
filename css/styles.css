@@ -54,14 +54,24 @@ select {
   max-width: 1180px;
   margin: 0 auto;
   padding: 32px 28px 56px;
+  padding-top: 120px;
 }
 
 .topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
   display: flex;
   justify-content: space-between;
   gap: 24px;
   align-items: center;
-  padding: 18px 0 24px;
+  padding: 18px 28px 24px;
+  background: linear-gradient(180deg, var(--bg) 0%, rgba(245, 247, 251, 0.95) 80%, rgba(245, 247, 251, 0));
+  backdrop-filter: blur(8px);
+  max-width: 100%;
+  border-bottom: 1px solid var(--border);
 }
 
 .brand {
@@ -83,6 +93,47 @@ select {
   color: var(--text);
 }
 
+.weather-widget {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  margin-left: auto;
+}
+
+.weather-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.weather-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.weather-temp {
+  color: var(--muted);
+}
+
+.weather-fallback {
+  font-size: 0.85rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.profile-picture {
+  width: 240px;
+  height: 240px;
+  border-radius: var(--radius);
+  object-fit: cover;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
 .hero {
   display: grid;
   align-items: stretch;
@@ -94,7 +145,7 @@ select {
 .hero-copy {
   display: grid;
   gap: 28px;
-  align-content: center;
+  align-content: start;
 }
 
 .eyebrow {
@@ -329,9 +380,51 @@ select {
   border-color: rgba(255,255,255,0.3);
 }
 
+/* Back to Top Button */
+.back-to-top {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(79, 93, 255, 0.24);
+  transition: all 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 999;
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.back-to-top:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(79, 93, 255, 0.32);
+}
+
+.back-to-top:active {
+  transform: translateY(-2px);
+}
+
+.back-to-top svg {
+  width: 20px;
+  height: 20px;
+}
+
 @media (max-width: 1024px) {
   .page-shell {
     padding: 28px 24px 48px;
+    padding-top: 110px;
   }
 
   .cards-grid {
@@ -342,16 +435,29 @@ select {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 18px;
   }
+
+  .back-to-top {
+    bottom: 24px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+  }
 }
 
 @media (max-width: 960px) {
   .page-shell {
     padding: 24px 22px 44px;
+    padding-top: 105px;
   }
 
   .hero {
     grid-template-columns: 1fr;
     gap: 32px;
+  }
+
+  .profile-picture {
+    width: 200px;
+    height: 200px;
   }
 
   .cards-grid,
@@ -376,17 +482,37 @@ select {
 @media (max-width: 680px) {
   .page-shell {
     padding: 20px 16px 36px;
+    padding-top: 140px;
   }
 
   .topbar {
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
+    padding: 16px 16px 20px;
   }
 
   .site-nav {
     flex-direction: column;
     gap: 12px;
+  }
+
+  .weather-widget {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .profile-picture {
+    width: 180px;
+    height: 180px;
+    margin: 0 auto;
+  }
+
+  .back-to-top {
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
   }
 
   .hero-copy h1 {

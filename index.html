@@ -16,13 +16,23 @@
           <a href="#tools">Tools</a>
           <a href="#contact">Contact</a>
         </nav>
+        <div class="weather-widget" id="weatherWidget">
+          <div class="weather-content">
+            <span class="weather-icon" id="weatherIcon">🌐</span>
+            <span class="weather-temp" id="weatherTemp">--°F</span>
+          </div>
+          <div class="weather-fallback" id="weatherFallback" style="display: none;">
+            📍 Location disabled
+          </div>
+        </div>
       </header>
 
       <main>
         <section id="intro" class="hero">
           <div class="hero-copy">
             <span class="eyebrow">User experience design for complex systems</span>
-            <h1>Hi, I’m Antoine.<br />I design digital experiences that simplify workflows for banking, aviation, healthcare and supply chain.</h1>
+            <h1>Hi, I’m Antoine.</h1>
+            <h2>I design digital experiences that simplify workflows for banking, aviation, healthcare and supply chain.</h2>
             <p>I combine enterprise strategy, design systems and inclusive product design to build easy-to-use experiences that move teams forward and help people feel confident in every interaction.</p>
             <div class="hero-actions">
               <a href="#work" class="button primary">View work</a>
@@ -31,6 +41,7 @@
           </div>
 
           <div class="hero-panel">
+            <img src="images/my-profile-pict.jpg" alt="Antoine Harris" class="profile-picture">
             <article class="hero-panel-card">
               <p class="panel-label">Impact</p>
               <h2>45 → 7 min</h2>
@@ -141,6 +152,112 @@
           <a class="button secondary" href="tel:+1234567890">Schedule a call</a>
         </div>
       </section>
+      <button id="backToTop" class="back-to-top" aria-label="Back to top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+      </button>
     </div>
+
+    <script>
+      // Initialize weather widget
+      function initWeatherWidget() {
+        const weatherWidget = document.getElementById('weatherWidget');
+        const weatherIcon = document.getElementById('weatherIcon');
+        const weatherTemp = document.getElementById('weatherTemp');
+        const weatherFallback = document.getElementById('weatherFallback');
+        const weatherContent = weatherWidget.querySelector('.weather-content');
+
+        if (!navigator.geolocation) {
+          showWeatherFallback();
+          return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+          position => {
+            const { latitude, longitude } = position.coords;
+            fetchWeather(latitude, longitude);
+          },
+          error => {
+            showWeatherFallback();
+          }
+        );
+
+        function fetchWeather(lat, lon) {
+          const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&temperature_unit=fahrenheit&timezone=auto`;
+
+          fetch(url)
+            .then(response => response.json())
+            .then(data => {
+              const current = data.current;
+              const temp = Math.round(current.temperature_2m);
+              const weatherCode = current.weather_code;
+              
+              const { emoji, description } = getWeatherEmoji(weatherCode);
+              
+              weatherIcon.textContent = emoji;
+              weatherTemp.textContent = `${temp}°F`;
+              weatherContent.style.display = 'flex';
+              weatherFallback.style.display = 'none';
+            })
+            .catch(error => {
+              showWeatherFallback();
+            });
+        }
+
+        function getWeatherEmoji(code) {
+          if (code === 0 || code === 1) {
+            return { emoji: '☀️', description: 'Clear' };
+          } else if (code === 2) {
+            return { emoji: '⛅', description: 'Partly Cloudy' };
+          } else if (code === 3) {
+            return { emoji: '☁️', description: 'Overcast' };
+          } else if (code === 45 || code === 48) {
+            return { emoji: '🌫️', description: 'Foggy' };
+          } else if (code >= 51 && code <= 67) {
+            return { emoji: '🌧️', description: 'Drizzle' };
+          } else if (code >= 71 && code <= 77) {
+            return { emoji: '❄️', description: 'Snow' };
+          } else if (code >= 80 && code <= 82) {
+            return { emoji: '🌧️', description: 'Rain' };
+          } else if (code >= 85 && code <= 86) {
+            return { emoji: '🌨️', description: 'Snow Showers' };
+          } else if (code === 95 || code === 96 || code === 99) {
+            return { emoji: '⛈️', description: 'Thunderstorm' };
+          }
+          return { emoji: '🌐', description: 'Weather' };
+        }
+
+        function showWeatherFallback() {
+          weatherContent.style.display = 'none';
+          weatherFallback.style.display = 'block';
+        }
+      }
+
+      // Initialize on DOM ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initWeatherWidget);
+      } else {
+        initWeatherWidget();
+      }
+
+      // Back to top button
+      const backToTopButton = document.getElementById('backToTop');
+      
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+          backToTopButton.classList.add('visible');
+        } else {
+          backToTopButton.classList.remove('visible');
+        }
+      });
+      
+      backToTopButton.addEventListener('click', () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+    </script>
   </body>
 </html>
