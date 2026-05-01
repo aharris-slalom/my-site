@@ -93,38 +93,6 @@ select {
   color: var(--text);
 }
 
-.weather-widget {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 40px;
-  margin-left: auto;
-}
-
-.weather-content {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 500;
-  font-size: 0.9rem;
-  color: var(--text);
-}
-
-.weather-icon {
-  font-size: 1.4rem;
-  line-height: 1;
-}
-
-.weather-temp {
-  color: var(--muted);
-}
-
-.weather-fallback {
-  font-size: 0.85rem;
-  color: var(--muted);
-  white-space: nowrap;
-}
-
 .profile-picture {
   width: 240px;
   height: 240px;
@@ -495,11 +463,6 @@ select {
   .site-nav {
     flex-direction: column;
     gap: 12px;
-  }
-
-  .weather-widget {
-    width: 100%;
-    margin-left: 0;
   }
 
   .profile-picture {
