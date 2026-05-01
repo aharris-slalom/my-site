@@ -25,16 +25,16 @@ function initWeatherWidget() {
   );
 
   function fetchWeather(lat, lon) {
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&temperature_unit=fahrenheit&timezone=auto`;
+    const apiKey = '82a16e042eeaf5a79f47acfee9ba2df9'; // Get free key from https://openweathermap.org/api
+    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`;
 
     fetch(url)
       .then(response => response.json())
       .then(data => {
-        const current = data.current;
-        const temp = Math.round(current.temperature_2m);
-        const weatherCode = current.weather_code;
+        const temp = Math.round(data.main.temp);
+        const weatherId = data.weather[0].id;
         
-        const { emoji, description } = getWeatherEmoji(weatherCode);
+        const { emoji, description } = getWeatherEmoji(weatherId);
         
         weatherIcon.textContent = emoji;
         weatherTemp.textContent = `${temp}°F`;
@@ -46,24 +46,22 @@ function initWeatherWidget() {
       });
   }
 
-  function getWeatherEmoji(code) {
-    if (code === 0 || code === 1) {
+  function getWeatherEmoji(id) {
+    if (id === 800) {
       return { emoji: '☀️', description: 'Clear' };
-    } else if (code === 2) {
+    } else if (id >= 801 && id <= 802) {
       return { emoji: '⛅', description: 'Partly Cloudy' };
-    } else if (code === 3) {
-      return { emoji: '☁️', description: 'Overcast' };
-    } else if (code === 45 || code === 48) {
+    } else if (id === 803 || id === 804) {
+      return { emoji: '☁️', description: 'Cloudy' };
+    } else if (id >= 701 && id <= 781) {
       return { emoji: '🌫️', description: 'Foggy' };
-    } else if (code >= 51 && code <= 67) {
+    } else if (id >= 300 && id <= 321) {
       return { emoji: '🌧️', description: 'Drizzle' };
-    } else if (code >= 71 && code <= 77) {
-      return { emoji: '❄️', description: 'Snow' };
-    } else if (code >= 80 && code <= 82) {
+    } else if (id >= 500 && id <= 531) {
       return { emoji: '🌧️', description: 'Rain' };
-    } else if (code >= 85 && code <= 86) {
-      return { emoji: '🌨️', description: 'Snow Showers' };
-    } else if (code === 95 || code === 96 || code === 99) {
+    } else if (id >= 600 && id <= 622) {
+      return { emoji: '❄️', description: 'Snow' };
+    } else if (id >= 200 && id <= 232) {
       return { emoji: '⛈️', description: 'Thunderstorm' };
     }
     return { emoji: '🌐', description: 'Weather' };
