@@ -210,6 +210,47 @@ select {
   line-height: 1.8;
 }
 
+.weather-display {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  border-radius: var(--radius);
+  padding: 32px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.weather-loading,
+.weather-error,
+.weather-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.weather-icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.weather-temp {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-top: 4px;
+}
+
+.weather-text {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
 .section {
   padding: 0;
   margin-bottom: 56px;
